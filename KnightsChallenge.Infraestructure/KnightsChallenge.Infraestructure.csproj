@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MassTransit" Version="8.2.3-develop.1810" />
+      <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.3-develop.1810" />
+      <PackageReference Include="MongoDB.EntityFrameworkCore" Version="8.0.1" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="Polly" Version="8.4.0" />
+      <PackageReference Include="Quartz" Version="3.9.0" />
+      <PackageReference Include="Quartz.Extensions.Hosting" Version="3.9.0" />
+      <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\KnightsChallenge.Entities\KnightsChallenge.Entities.csproj" />
+    </ItemGroup>
+
+</Project>
