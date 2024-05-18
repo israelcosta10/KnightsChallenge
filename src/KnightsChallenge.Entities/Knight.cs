@@ -13,30 +13,18 @@ public class Knight : Aggregate
   public DateTime Birth { get; set; }
 
   public List<Weapon> Weapons { get; set; }
+  
+  public string KeyAttribute { get; set; }
 
   public Attributes Attributes { get; set; }
 
-  public string KeyAttribute { get; set; }
-
   private IDateTimer DateTimer { get; set; }
 
-  public int Attack
-  {
-    get => GetAttack();
-    private set { }
-  }
+  public int Attack { get; private set; }
 
-  public double Exp
-  {
-    get => GetExp();
-    private set { }
-  }
+  public double Exp { get; private set; }
 
-  public int Age
-  {
-    get => GetAge();
-    private set { }
-  }
+  public int Age { get; private set; }
 
   public Knight (IDateTimer? dateTimer = null)
   {
@@ -62,6 +50,10 @@ public class Knight : Aggregate
       throw new BadRequestError();
     
     knight.KeyAttribute = keyAttribute;
+
+    knight.Age = knight.GetAge();
+    knight.Attack = knight.GetAttack();
+    knight.Exp = knight.GetExp();
 
     return knight;
   }

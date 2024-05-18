@@ -11,7 +11,6 @@ using KnightsChallenge.Queries.GetKnight;
 using KnightsChallenge.WebApi.Middlewares;
 using MassTransit;
 using Microsoft.OpenApi.Models;
-using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using Quartz;
 using Serilog;
@@ -26,12 +25,6 @@ public class Startup
     var connectionString = Environment.GetEnvironmentVariable("MONGO_DB_CONNECTION_URI");
     var databaseName = Environment.GetEnvironmentVariable("MONGO_DB_CONNECTION_DATABASE");
     var client = new MongoClient(connectionString);
-    
-    BsonClassMap.RegisterClassMap<Aggregate>();
-    BsonClassMap.RegisterClassMap<Entity>();
-    BsonClassMap.RegisterClassMap<Knight>();
-    BsonClassMap.RegisterClassMap<Hero>();
-    BsonClassMap.RegisterClassMap<OutboxMessage>();
 
     services.AddSingleton<IMongoClient>(client);
     services.AddTransient(typeof(IMongoCollection<Knight>),
@@ -41,7 +34,7 @@ public class Startup
     services.AddTransient(typeof(IMongoCollection<OutboxMessage>),
       (sp) => client.GetDatabase(databaseName).GetCollection<OutboxMessage>("messages"));
 
-    services.AddTransient<IUnitOfWork, UnitOfWork>();
+    services.AddSingleton<IUnitOfWork, UnitOfWork>();
 
     var logger = new LoggerConfiguration().WriteTo.OpenTelemetry().CreateLogger();
     services.AddSingleton<ILogger>(logger);

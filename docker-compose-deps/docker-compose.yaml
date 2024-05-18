@@ -11,14 +11,15 @@ services:
       - 15672:15672
       
   mongodb:
-    image: 'bitnami/mongodb:latest'
+    image: mongo
     ports:
       - 27017:27017
     environment:
-      - MONGODB_ADVERTISED_HOSTNAME=mongodb
-      - MONGODB_REPLICA_SET_MODE=primary
-      - MONGODB_ROOT_PASSWORD=password123
-      - MONGODB_REPLICA_SET_KEY=replicasetkey123
+      MONGO_INITDB_ROOT_USERNAME: username
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: entrypoint
+    volumes:
+      - ./mongodb/initdb.js:/docker-entrypoint-initdb.d/initdb.js:ro
   
   aspire:
     image: mcr.microsoft.com/dotnet/nightly/aspire-dashboard:8.0.0-preview.6

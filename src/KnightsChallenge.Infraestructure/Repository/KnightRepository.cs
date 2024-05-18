@@ -5,11 +5,8 @@ using MongoDB.Driver;
 
 namespace KnightsChallenge.Infraestructure.Repository;
 
-public class KnightRepository (IMongoClient mongoClient, IUnitOfWork unitOfWork) : IKnightRepository
+public class KnightRepository (IMongoCollection<Knight> collection, IUnitOfWork unitOfWork) : IKnightRepository
 {
-  private readonly IMongoCollection<Knight> collection =
-    mongoClient.GetDatabase("MONGO_DB_CONNECTION_DATABASE").GetCollection<Knight>("knights");
-  
   public async Task<Knight?> FindByNicknameAsync (string nickname)
   {
     return (await collection.FindAsync(knight => knight.Nickname == nickname)).FirstOrDefault();

@@ -5,12 +5,9 @@ using Newtonsoft.Json;
 
 namespace KnightsChallenge.Infraestructure.Database;
 
-public class UnitOfWork (IMongoClient mongoClient) : IUnitOfWork
+public class UnitOfWork (IMongoClient mongoClient, IMongoCollection<OutboxMessage> collection) : IUnitOfWork
 {
   private IClientSessionHandle _session { get; } = mongoClient.StartSession();
-
-  private readonly IMongoCollection<OutboxMessage> _outboxMessagesCollection =
-    mongoClient.GetDatabase("MONGO_DB_CONNECTION_DATABASE").GetCollection<OutboxMessage>("messages");
 
   private List<Action> Operations { get; } = [];
   
@@ -27,11 +24,15 @@ public class UnitOfWork (IMongoClient mongoClient) : IUnitOfWork
   public void CleanOperations()
   {
     Operations.Clear();
+    Aggregates.Clear();
   }
 
   public async Task SaveChangesAsync(CancellationToken cancellationToken)
   {
-    _session.StartTransaction();
+    /**
+     * No caso de um banco de dados utilizando replica sets, as operações begin commit do mongodb funcionam
+     */
+    // _session.StartTransaction();
 
     Operations.ForEach(o =>
     {
@@ -39,22 +40,24 @@ public class UnitOfWork (IMongoClient mongoClient) : IUnitOfWork
     });
 
     var domainEvents = Aggregates.SelectMany(aggregate => aggregate.DomainEvents);
-    _outboxMessagesCollection.InsertMany(
-      domainEvents.Select(domainEvent =>
-        new OutboxMessage
-        {
-          OccurredOn = DateTime.Now,
+    var outboxMessages = domainEvents.Select(domainEvent =>
+      new OutboxMessage
+      {
+        OccurredOn = DateTime.Now,
 
-          Assembly = domainEvent.GetType().Assembly.FullName,
-          
-          Type = domainEvent.GetType().FullName,
+        Assembly = domainEvent.GetType().Assembly.FullName,
 
-          Content = JsonConvert.SerializeObject(domainEvent,
-            new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }),
-        }));
+        Type = domainEvent.GetType().FullName,
 
-    await _session.CommitTransactionAsync(cancellationToken);
-
+        Content = JsonConvert.SerializeObject(domainEvent,
+          new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }),
+      });
+    
+    if (outboxMessages.Count() > 0)
+      await collection.InsertManyAsync(outboxMessages);
+    
     CleanOperations();
+
+    // await _session.CommitTransactionAsync(cancellationToken);
   }
 }

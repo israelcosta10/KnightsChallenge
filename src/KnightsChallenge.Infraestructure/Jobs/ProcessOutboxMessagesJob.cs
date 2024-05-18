@@ -9,11 +9,8 @@ using Serilog;
 
 namespace KnightsChallenge.Infraestructure.Jobs;
 
-public class ProcessOutboxMessagesJob (IMongoClient mongoClient, ILogger logger, IBus bus) : IJob
+public class ProcessOutboxMessagesJob (IMongoCollection<OutboxMessage> collection, ILogger logger, IBus bus) : IJob
 {
-  private IMongoCollection<OutboxMessage> collection =
-    mongoClient.GetDatabase("MONGO_DB_CONNECTION_DATABASE").GetCollection<OutboxMessage>("messages");
-  
   public async Task Execute (IJobExecutionContext context)
   {
     var messages = await collection.Find(message => message.ProcessedOn == null).Limit(20).ToListAsync();

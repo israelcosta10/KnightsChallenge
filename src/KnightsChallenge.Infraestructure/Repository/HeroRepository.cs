@@ -5,11 +5,8 @@ using MongoDB.Driver;
 
 namespace KnightsChallenge.Infraestructure.Repository;
 
-public class HeroRepository (IUnitOfWork unitOfWork, IMongoClient mongoClient) : IHeroRepository
+public class HeroRepository (IUnitOfWork unitOfWork, IMongoCollection<Hero> collection) : IHeroRepository
 {
-  private readonly IMongoCollection<Hero> collection =
-    mongoClient.GetDatabase("MONGO_DB_CONNECTION_DATABASE").GetCollection<Hero>("heroes");
-
   public async Task<Hero?> FindByIdAsync (string id)
   {
     return (await collection.FindAsync(knight => knight.Id == id)).FirstOrDefault();
