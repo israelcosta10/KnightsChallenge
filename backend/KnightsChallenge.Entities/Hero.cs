@@ -2,9 +2,7 @@
 
 public class Hero : Knight
 {
-  public DateTime BecameAHeroIn { get; set; }
-  
-  public static Hero Build (string name, string nickname, DateTime birth, List<Weapon> weapons, Attributes attributes)
+  public static Hero Build (string name, string nickname, DateTime birth, List<Weapon> weapons, Attributes attributes, string keyAttribute)
   {
     return new Hero
     {
@@ -16,7 +14,9 @@ public class Hero : Knight
 
       Weapons = weapons,
 
-      Attributes = attributes
+      Attributes = attributes,
+      
+      KeyAttribute = keyAttribute
     };
   }
 }

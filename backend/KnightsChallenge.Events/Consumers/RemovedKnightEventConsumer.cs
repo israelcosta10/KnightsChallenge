@@ -15,7 +15,7 @@ public class RemovedKnightEventConsumer (IHeroRepository heroRepository, IUnitOf
       context.Message.Weapons.Select(w => Weapon.Build(w.Name, w.Mod, w.Attr, w.Equipped)).ToList(),
       Attributes.Build(context.Message.Attributes.Strength, context.Message.Attributes.Dexterity,
         context.Message.Attributes.Constitution, context.Message.Attributes.Intelligence,
-        context.Message.Attributes.Wisdom, context.Message.Attributes.Charisma)));
+        context.Message.Attributes.Wisdom, context.Message.Attributes.Charisma), context.Message.KeyAttribute));
 
     await unitOfWork.SaveChangesAsync(context.CancellationToken);
   }

@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import InputGroup from 'primevue/inputgroup';
-import InputText from 'primevue/inputtext';
-import Calendar from 'primevue/calendar';
-import InputNumber from 'primevue/inputnumber';
-import ToggleButton from 'primevue/togglebutton';
-import Dropdown from 'primevue/dropdown';
-import Button from 'primevue/button';
+import InputGroup from 'primevue/inputgroup'
+import InputText from 'primevue/inputtext'
+import Calendar from 'primevue/calendar'
+import InputNumber from 'primevue/inputnumber'
+import ToggleButton from 'primevue/togglebutton'
+import Dropdown from 'primevue/dropdown'
+import Button from 'primevue/button'
 import { ref } from 'vue'
 import { CreateKnightDto } from '@/dto/CreateKnightDto'
 import knightGateway from '@/gateways/KnightGateway'
 import { useRouter } from 'vue-router'
 
-const dto = ref<CreateKnightDto>(new CreateKnightDto());
+const dto = ref<CreateKnightDto>(new CreateKnightDto())
 
-const attributes = ref<{ id: string, name: string }[]>([
-  { id: "strength", name: "Strength" },
-  { id: "dexterity", name: "Dexterity" },
-  { id: "constitution", name: "Constitution" },
-  { id: "intelligence", name: "Intelligence" },
-  { id: "charisma", name: "Charisma" }
+const attributes = ref<{ id: string; name: string }[]>([
+  { id: 'strength', name: 'Strength' },
+  { id: 'dexterity', name: 'Dexterity' },
+  { id: 'constitution', name: 'Constitution' },
+  { id: 'intelligence', name: 'Intelligence' },
+  { id: 'charisma', name: 'Charisma' }
 ])
 
 const router = useRouter()
@@ -26,9 +26,9 @@ const router = useRouter()
 const create = async (evt: Event) => {
   evt.preventDefault()
 
-  await knightGateway.create(dto.value);
+  await knightGateway.create(dto.value)
 
-  router.push('/knights')
+  router.push('/')
 }
 </script>
 
@@ -45,7 +45,14 @@ const create = async (evt: Event) => {
     </InputGroup>
 
     <InputGroup>
-      <Dropdown :required="true" :options="attributes" optionValue="id" optionLabel="name" placeholder="Select a main attribute" v-model="dto.keyAttribute" />
+      <Dropdown
+        :required="true"
+        :options="attributes"
+        optionValue="id"
+        optionLabel="name"
+        placeholder="Select a main attribute"
+        v-model="dto.keyAttribute"
+      />
     </InputGroup>
 
     <Calendar :required="true" placeholder="Birthday" v-model="dto.birthday" />
@@ -63,11 +70,23 @@ const create = async (evt: Event) => {
         </InputGroup>
 
         <InputGroup>
-          <Dropdown :required="true" :options="attributes" optionValue="id" optionLabel="name"  placeholder="Select a main attribute" v-model="weapon.attr" />
+          <Dropdown
+            :required="true"
+            :options="attributes"
+            optionValue="id"
+            optionLabel="name"
+            placeholder="Select a main attribute"
+            v-model="weapon.attr"
+          />
         </InputGroup>
 
         <InputGroup>
-          <ToggleButton :required="true" onLabel="Equipped" offLabel="Not equipped" v-model="weapon.equipped" />
+          <ToggleButton
+            :required="true"
+            onLabel="Equipped"
+            offLabel="Not equipped"
+            v-model="weapon.equipped"
+          />
         </InputGroup>
 
         <Button label="Delete" @click="() => dto.removeWeapon(index)" />
@@ -87,11 +106,19 @@ const create = async (evt: Event) => {
     </InputGroup>
 
     <InputGroup>
-      <InputNumber :required="true" v-model="dto.attributes.constitution" placeholder="Constitution" />
+      <InputNumber
+        :required="true"
+        v-model="dto.attributes.constitution"
+        placeholder="Constitution"
+      />
     </InputGroup>
 
     <InputGroup>
-      <InputNumber :required="true" v-model="dto.attributes.intelligence" placeholder="Intelligence" />
+      <InputNumber
+        :required="true"
+        v-model="dto.attributes.intelligence"
+        placeholder="Intelligence"
+      />
     </InputGroup>
 
     <InputGroup>
@@ -102,7 +129,7 @@ const create = async (evt: Event) => {
       <InputNumber :required="true" v-model="dto.attributes.charisma" placeholder="Charisma" />
     </InputGroup>
 
-    <Button label="Create" type="submit"/>
+    <Button label="Create" type="submit" />
   </form>
 </template>
 

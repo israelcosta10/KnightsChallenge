@@ -5,6 +5,11 @@ services:
     build: ../backend/KnightsChallenge.WebApi
     ports:
       - 80:8080
+    restart: always
+    depends_on:
+      - rabbitmq
+      - mongodb
+      - aspire 
     links:
       - rabbitmq
       - mongodb
@@ -23,10 +28,12 @@ services:
     build: ../frontend
     ports:
       - 3000:80
+    depends_on:
+      - knightschallenge.webapi
     links:
       - knightschallenge.webapi
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     environment:
       VITE_WEB_API_URI: http://knightschallenge.webapi
   

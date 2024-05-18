@@ -1,33 +1,26 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createMemoryHistory } from 'vue-router'
+import KnightsView from '../views/KnightsView.vue'
+import CreateKnightsView from '../views/CreateKnightView.vue'
+import UpdateKnightNicknameView from '../views/UpdateKnightNicknameView.vue'
 
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+export const router = createRouter({
+  history: createMemoryHistory(import.meta.env.BASE_URL),
+
   routes: [
     {
+      path: '/',
+      name: '/',
+      component: KnightsView
+    },
+    {
       path: '/knights',
-      name: 'knights-list',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/KnightsView.vue')
+      name: '/knights',
+      component: CreateKnightsView
     },
     {
-      path: '/create-knight',
-      name: 'knights-create',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/CreateKnightView.vue')
-    },
-    {
-      path: '/edit-knight/:id',
-      name: 'knights-create',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/UpdateKnightNicknameView.vue')
+      path: '/knights/:id',
+      name: '/knights/:id',
+      component: UpdateKnightNicknameView
     }
   ]
 })
-
-export default router

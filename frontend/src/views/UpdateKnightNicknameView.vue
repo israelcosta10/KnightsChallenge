@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import InputGroup from 'primevue/inputgroup';
-import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
+import InputGroup from 'primevue/inputgroup'
+import InputText from 'primevue/inputtext'
+import Button from 'primevue/button'
 import { ref } from 'vue'
 import knightGateway from '@/gateways/KnightGateway'
 import { useRoute, useRouter } from 'vue-router'
 import { UpdateKnightNicknameDto } from '@/dto/UpdateKnightNicknameDto'
 
-const dto = ref<UpdateKnightNicknameDto>(new UpdateKnightNicknameDto());
+const dto = ref<UpdateKnightNicknameDto>(new UpdateKnightNicknameDto())
 
 const router = useRouter()
 const route = useRoute()
@@ -15,9 +15,9 @@ const route = useRoute()
 const create = async (evt: Event) => {
   evt.preventDefault()
 
-  await knightGateway.updateNickname(route.params.id as string, dto.value);
+  await knightGateway.updateNickname(route.params.id as string, dto.value)
 
-  router.push('/knights')
+  router.push('/')
 }
 </script>
 
@@ -29,7 +29,7 @@ const create = async (evt: Event) => {
       <InputText :required="true" placeholder="Nickname" v-model="dto.nickname"></InputText>
     </InputGroup>
 
-    <Button label="Update nickname" type="submit"/>
+    <Button label="Update nickname" type="submit" />
   </form>
 </template>
 
