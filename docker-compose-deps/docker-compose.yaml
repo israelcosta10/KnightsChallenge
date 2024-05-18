@@ -1,6 +1,35 @@
 version: '3.9'
 
 services:
+  knightschallenge.webapi:
+    build: ../backend/KnightsChallenge.WebApi
+    ports:
+      - 80:8080
+    links:
+      - rabbitmq
+      - mongodb
+      - aspire
+    environment:
+      MONGO_DB_CONNECTION_URI: mongodb://username:password@mongodb:27017/
+      MONGO_DB_CONNECTION_DATABASE: knightsservice
+      RABBITMQ_HOSTNAME: rabbitmq
+      RABBITMQ_USERNAME: guest
+      RABBITMQ_PASSWORD: guest
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://aspire:4317
+      OTEL_SERVICE_NAME: KnightsChallengeService
+      OTEL_METRIC_EXPORT_INTERVAL: 5000
+  
+  knightschallenge.webapp:
+    build: ../frontend
+    ports:
+      - 3000:80
+    links:
+      - knightschallenge.webapi
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    environment:
+      VITE_WEB_API_URI: http://knightschallenge.webapi
+  
   rabbitmq:
     image: rabbitmq:3-management
     environment:
